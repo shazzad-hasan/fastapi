@@ -1,1 +1,1 @@
-# cs50_web_programming
+# web_programming
