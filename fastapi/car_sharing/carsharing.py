@@ -22,7 +22,13 @@ def welcome(name):
     return {"message": f"Hi {name}, welcome to the car sharing service!"}
 
 @app.get("/api/cars")
-def get_cars():
+def get_cars(size: str|None = None, doors: int|None = None) -> list:
+    
+    if size:
+        return [car for car in db if car['size'] == size]
+    if doors:
+        return [car for car in db if car['doors'] >= doors]
+
     return db
 
 
