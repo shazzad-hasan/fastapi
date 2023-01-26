@@ -81,7 +81,19 @@
         "size": "m",
         "fuel": "hybrid",
         "doors": 5,
+        "transmission": "manual"
+    },
+    {
+        "size": "xl",
+        "fuel": "electric",
+        "doors": 4,
+        "transmission": "auto"
+    },
+    {
+        "size": "l",
+        "fuel": "electric",
+        "doors": 5,
         "transmission": "manual",
-        "id": 14
+        "id": 16
     }
 ]
