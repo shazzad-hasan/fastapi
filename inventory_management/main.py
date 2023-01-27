@@ -6,7 +6,7 @@ import uvicorn
 app = FastAPI()
 
 class InputItem(BaseModel):
-    item: str
+    name: str
     weight: str
     brand: str 
     diet_type: Optional[str] = None
@@ -42,7 +42,7 @@ def get_item(name: Optional[str]=None):
     return {name: "Not found"}
 
 @app.post("/add_item/{item_id}")
-def add_item(item: InputItem, item_id: int):
+def add_item(item_id: int, item: InputItem):
     if item_id in inventory:
         return {"Error": "Item already exists."}
     inventory[item_id] = {"Item": item.name,
