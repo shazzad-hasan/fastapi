@@ -12,19 +12,28 @@ class InputItem(BaseModel):
     diet_type: Optional[str] = None
     price: float
 
-inventory = {
-    1: {"Item": "Coffee",
-        "Item weight": "190 Grams",
-        "Brand": "Douwe Egberts",
-        "Format": "Instant Coffee",
-        "Price": 3},
+class UpdateItem(BaseModel):
+    name: Optional[str] = None
+    weight: Optional[str] = None
+    brand: Optional[str] = None
+    diet_type: Optional[str] = None
+    price: Optional[float] = None
 
-    2: {"Item": "Cashew Nuts",
-        "Item weight": "1 Kilograms",
-        "Brand": "Old India",
-        "Diet type": "Vegetarian", 
-        "Price": 10}
-}
+# inventory = {
+#     1: {"name": "Coffee",
+#         "weight": "190 Grams",
+#         "brand": "Douwe Egberts",
+#         "format": "Instant Coffee",
+#         "price": 3},
+
+#     2: {"name": "Cashew Nuts",
+#         "weight": "1 Kilograms",
+#         "brand": "Old India",
+#         "diet_type": "Vegetarian", 
+#         "price": 10}
+# } 
+
+inventory = {}
 
 @app.get("/")
 def home():
@@ -37,7 +46,7 @@ def get_item(item_id: int):
 @app.get("/get_by_name")
 def get_item(name: Optional[str]=None):
     for item_id in inventory:
-        if inventory[item_id]["Item"] == name:
+        if inventory[item_id].name == name:
             return inventory[item_id]
     return {name: "Not found"}
 
@@ -45,12 +54,25 @@ def get_item(name: Optional[str]=None):
 def add_item(item_id: int, item: InputItem):
     if item_id in inventory:
         return {"Error": "Item already exists."}
-    inventory[item_id] = {"Item": item.name,
-                          "Item weight": item.weight,
-                          "Brand": item.brand,
-                          "Diet type": item.diet_type,
-                          "Price": item.price
-                          }
+    inventory[item_id] = item
+    return inventory[item_id]
+
+@app.put("/update_item/{item_id}")
+def update_item(item_id: int, item: UpdateItem):
+    if item_id not in inventory:
+        return {"Error": "Item does not exists."}
+
+    if item.name != None:
+        inventory[item_id].name = item.name 
+    if item.weight != None:
+        inventory[item_id].weight = item.weight
+    if item.brand != None:
+        inventory[item_id].brand = item.brand 
+    if item.diet_type != None:
+        inventory[item_id].diet_type = item.diet_type
+    if item.price != None:
+        inventory[item_id].price = item.price
+
     return inventory[item_id]
 
 
