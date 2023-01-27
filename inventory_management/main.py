@@ -75,6 +75,13 @@ def update_item(item_id: int, item: UpdateItem):
 
     return inventory[item_id]
 
+@app.delete("/delete_item")
+def delete_item(item_id: int):
+    if item_id not in inventory:
+        return {"Error": "Item does not exists."}
+    del inventory[item_id]
+    return {"Success": "Item deleted!"}
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
