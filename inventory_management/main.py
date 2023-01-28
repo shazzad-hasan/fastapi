@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, HTTPException, status
 from typing import Optional
 from pydantic import BaseModel
 import uvicorn 
@@ -48,19 +48,19 @@ def get_item(name: Optional[str]=None):
     for item_id in inventory:
         if inventory[item_id].name == name:
             return inventory[item_id]
-    return {name: "Not found"}
+    raise HTTPException(status_code=400, detail="Item not found.")
 
 @app.post("/add_item/{item_id}")
 def add_item(item_id: int, item: InputItem):
     if item_id in inventory:
-        return {"Error": "Item already exists."}
+        raise HTTPException(status_code=404,  detail="Item already exists.")
     inventory[item_id] = item
     return inventory[item_id]
 
 @app.put("/update_item/{item_id}")
 def update_item(item_id: int, item: UpdateItem):
     if item_id not in inventory:
-        return {"Error": "Item does not exists."}
+        raise HTTPException(status_code=404, detail="Item not found.")
 
     if item.name != None:
         inventory[item_id].name = item.name 
@@ -78,7 +78,7 @@ def update_item(item_id: int, item: UpdateItem):
 @app.delete("/delete_item")
 def delete_item(item_id: int):
     if item_id not in inventory:
-        return {"Error": "Item does not exists."}
+        raise HTTPException(status_code=404, detail="Item not found.")
     del inventory[item_id]
     return {"Success": "Item deleted!"}
 
