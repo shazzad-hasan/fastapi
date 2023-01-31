@@ -48,7 +48,7 @@ def get_item(name: Optional[str]=None):
     for item_id in inventory:
         if inventory[item_id].name == name:
             return inventory[item_id]
-    raise HTTPException(status_code=400, detail="Item not found.")
+    raise HTTPException(status_code=404, detail="Item not found.")
 
 @app.post("/add_item/{item_id}")
 def add_item(item_id: int, item: InputItem):
